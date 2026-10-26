@@ -1,0 +1,159 @@
+---
+import { getDictionary, otherLocale, pathFor, type Locale, type RouteKey } from '../i18n';
+
+interface Props {
+  lang: Locale;
+  routeKey: RouteKey;
+}
+
+const { lang, routeKey } = Astro.props;
+const t = getDictionary(lang);
+const other = otherLocale(lang);
+const home = pathFor('home', lang);
+// On the home page, anchors stay on the page; elsewhere they lead back to it.
+const anchor = (id: string) => (routeKey === 'home' ? `#${id}` : `${home}#${id}`);
+const links = [
+  { id: 'results', label: t.nav.results },
+  { id: 'examples', label: t.nav.examples },
+  { id: 'pricing', label: t.nav.pricing },
+  { id: 'faq', label: t.nav.faq },
+];
+---
+
+<header class="header">
+  <div class="container header__inner">
+    <a class="header__logo" href={home} aria-label={`Ronan McManus, ${t.nav.home}`}>
+      <span class="header__monogram" aria-hidden="true">RM</span>
+      <span class="header__name">Ronan McManus</span>
+    </a>
+
+    <nav class="header__nav" aria-label="Sections">
+      <ul>
+        {
+          links.map((link) => (
+            <li>
+              <a href={anchor(link.id)}>{link.label}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="header__actions">
+      <a class="header__lang" href={pathFor(routeKey, other)} hreflang={other} lang={other}>
+        {other.toUpperCase()}<span class="visually-hidden"> · {t.nav.otherLanguageLabel}</span>
+      </a>
+      <a class="btn btn--primary btn--small" href={anchor('contact')}>{t.nav.contact}</a>
+    </div>
+  </div>
+</header>
+
+<style>
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgb(10 10 13 / 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .header__inner {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    min-height: var(--header-height);
+  }
+
+  .header__logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    text-decoration: none;
+    margin-right: auto;
+  }
+
+  .header__monogram {
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 0.45rem;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 0.875rem;
+    letter-spacing: -0.02em;
+  }
+
+  .header__name {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 0.8125rem;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+
+  .header__nav {
+    display: none;
+  }
+
+  .header__nav ul {
+    display: flex;
+    gap: 1.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .header__nav a {
+    color: var(--text-muted);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  .header__nav a:hover {
+    color: var(--text);
+  }
+
+  .header__actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .header__lang {
+    display: grid;
+    place-items: center;
+    min-width: 2.75rem;
+    min-height: 2.5rem;
+    padding-inline: 0.5rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+  }
+
+  .header__lang:hover {
+    border-color: var(--text-muted);
+  }
+
+  @media (max-width: 22.5rem) {
+    .header__name {
+      display: none;
+    }
+  }
+
+  @media (min-width: 56rem) {
+    .header__nav {
+      display: block;
+      margin-right: 1rem;
+    }
+  }
+</style>

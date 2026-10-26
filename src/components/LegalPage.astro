@@ -1,0 +1,178 @@
+---
+import { LEGAL_ADDRESS, LEGAL_PHONE } from 'astro:env/server';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { shared } from '../data/shared';
+import { fill, getDictionary, type Locale } from '../i18n';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = getDictionary(lang);
+const { labels, sections } = t.legal;
+const { legal, site } = shared;
+
+const address = LEGAL_ADDRESS?.trim();
+const phone = LEGAL_PHONE?.trim();
+const missing = [!address && 'LEGAL_ADDRESS', !phone && 'LEGAL_PHONE'].filter(Boolean);
+if (missing.length > 0) {
+  console.warn(`[legal] ${missing.join(' and ')} not set: the ${lang} legal notice is incomplete (see README).`);
+}
+
+const publisher: Array<[string, string]> = [
+  [labels.name, legal.ownerName],
+  [labels.legalForm, labels.legalFormValue],
+  [labels.siren, legal.siren],
+  [labels.siret, legal.siret],
+  [labels.registry, labels.registryValue],
+  [labels.vat, legal.vatNumber],
+];
+if (address) publisher.push([labels.address, address]);
+if (phone) publisher.push([labels.phone, phone]);
+---
+
+<BaseLayout
+  lang={lang}
+  title={`${t.legal.title} · ${site.name}`}
+  description={t.legal.description}
+  routeKey="legal"
+  noindex
+>
+  <article class="section legal">
+    <div class="container legal__inner">
+      <h1 class="display legal__title">{t.legal.title}</h1>
+
+      <section aria-labelledby="publisher">
+        <h2 id="publisher">{sections.publisher}</h2>
+        <dl class="legal__list">
+          {
+            publisher.map(([label, value]) => (
+              <div>
+                <dt>{label}</dt>
+                <dd>{value}</dd>
+              </div>
+            ))
+          }
+          <div>
+            <dt>{labels.email}</dt>
+            <dd><a class="text-link" href={`mailto:${site.email}`}>{site.email}</a></dd>
+          </div>
+          <div>
+            <dt>{labels.director}</dt>
+            <dd>{legal.ownerName}</dd>
+          </div>
+        </dl>
+        <p>{labels.vatExemption}</p>
+      </section>
+
+      <section aria-labelledby="host">
+        <h2 id="host">{sections.host}</h2>
+        <p>
+          {legal.host.name}<br />
+          {legal.host.address}<br />
+          {legal.host.phone} · <a class="text-link" href={legal.host.url}>{legal.host.url.replace('https://', '')}</a>
+        </p>
+      </section>
+
+      <section aria-labelledby="ip">
+        <h2 id="ip">{sections.ip}</h2>
+        {t.legal.ipText.map((paragraph) => <p>{paragraph}</p>)}
+      </section>
+
+      <section aria-labelledby="privacy">
+        <h2 id="privacy">{sections.privacy}</h2>
+        {
+          t.legal.privacy.map((item) => (
+            <>
+              <h3>{item.heading}</h3>
+              <p>{fill(item.text, { email: site.email })}</p>
+            </>
+          ))
+        }
+        {
+          shared.analytics.cloudflareToken && (
+            <>
+              <h3>{t.legal.analyticsParagraph.heading}</h3>
+              <p>{t.legal.analyticsParagraph.text}</p>
+            </>
+          )
+        }
+      </section>
+
+      <section aria-labelledby="terms">
+        <h2 id="terms">{sections.terms}</h2>
+        {t.legal.termsText.map((paragraph) => <p>{paragraph}</p>)}
+      </section>
+
+      <p class="legal__updated">{t.legal.updated}</p>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .legal__inner {
+    display: grid;
+    gap: 2.5rem;
+    max-width: 46rem;
+  }
+
+  .legal__title {
+    font-size: clamp(1.75rem, 6vw, 2.75rem);
+  }
+
+  .legal section {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .legal h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+
+  .legal h3 {
+    margin-top: 0.5rem;
+    font-size: 1rem;
+    font-weight: 700;
+  }
+
+  .legal p {
+    color: var(--text-muted);
+  }
+
+  .legal__list {
+    display: grid;
+    gap: 0.5rem;
+    margin: 0;
+  }
+
+  .legal__list div {
+    display: grid;
+    gap: 0 1rem;
+  }
+
+  .legal__list dt {
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+  }
+
+  .legal__list dd {
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .legal__updated {
+    font-size: 0.8125rem;
+  }
+
+  @media (min-width: 40rem) {
+    .legal__list div {
+      grid-template-columns: 14rem 1fr;
+    }
+
+    .legal__list dt {
+      font-size: 0.9375rem;
+    }
+  }
+</style>

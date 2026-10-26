@@ -1,0 +1,60 @@
+---
+// Bilingual 404: GitHub Pages serves this single file for every unknown URL.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getDictionary, locales, pathFor } from '../i18n';
+---
+
+<BaseLayout lang="en" title="404 · Ronan McManus" description={getDictionary('en').notFound.text} routeKey="home" noindex canonical={false}>
+  <section class="section not-found">
+    <div class="container not-found__inner">
+      <p class="not-found__code display" aria-hidden="true">404</p>
+      {
+        locales.map((lang) => {
+          const t = getDictionary(lang).notFound;
+          return (
+            <div class="not-found__block" lang={lang}>
+              <h1 class="display not-found__title">{t.title}</h1>
+              <p>{t.text}</p>
+              <a class="btn btn--primary" href={pathFor('home', lang)}>
+                {t.back}
+              </a>
+            </div>
+          );
+        })
+      }
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .not-found__inner {
+    display: grid;
+    gap: 2.5rem;
+    max-width: 40rem;
+  }
+
+  .not-found__code {
+    font-size: clamp(5rem, 25vw, 10rem);
+    line-height: 1;
+    color: var(--accent);
+  }
+
+  .not-found__block {
+    display: grid;
+    gap: 0.75rem;
+    justify-items: start;
+  }
+
+  .not-found__block + .not-found__block {
+    padding-top: 2.5rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .not-found__title {
+    font-size: clamp(1.5rem, 5vw, 2.25rem);
+  }
+
+  .not-found__block p {
+    color: var(--text-muted);
+  }
+</style>

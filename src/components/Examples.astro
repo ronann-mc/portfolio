@@ -1,0 +1,159 @@
+---
+import LiteYouTube from './LiteYouTube.astro';
+import { shared } from '../data/shared';
+import { fill, getDictionary, highlight, type Locale } from '../i18n';
+import { formatDuration, parseTimecode } from '../lib/format';
+import { watchUrl } from '../lib/youtube';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = getDictionary(lang);
+
+const demos = shared.demos.map((demo) => {
+  const title = t.examples.titles[demo.youtubeId];
+  if (!title) throw new Error(`Add a title for demo "${demo.youtubeId}" in examples.titles (${lang}.ts)`);
+  const episode = parseTimecode(demo.source.episodeLength);
+  const start = parseTimecode(demo.source.start);
+  const end = parseTimecode(demo.source.end);
+  const short = parseTimecode(demo.length);
+  return {
+    demo,
+    title,
+    start,
+    // Position of the clip inside the episode, for the little timeline.
+    clipLeft: (start / episode) * 100,
+    clipWidth: Math.max(((end - start) / episode) * 100, 1.5),
+    line: fill(t.examples.beforeAfter, {
+      episode: formatDuration(episode, lang),
+      clip: formatDuration(end - start, lang),
+      short: formatDuration(short, lang),
+    }),
+    badge: `${t.examples.after} · ${formatDuration(short, lang)}`,
+  };
+});
+---
+
+{
+  demos.length > 0 && (
+    <section id="examples" class="section" aria-labelledby="examples-title">
+      <div class="container">
+        <div class="section__head">
+          <h2 id="examples-title" class="display section-title" set:html={highlight(t.examples.title)} />
+          <p class="section__intro">{t.examples.intro}</p>
+        </div>
+
+        <div class="examples">
+          {demos.map(({ demo, title, start, clipLeft, clipWidth, line, badge }) => (
+            <article class="example card">
+              <div class="example__player">
+                <LiteYouTube
+                  id={demo.youtubeId}
+                  title={title}
+                  playLabel={fill(t.player.play, { title })}
+                  badge={badge}
+                  thumbnail={demo.thumbnail}
+                />
+              </div>
+              <div class="example__info">
+                <ul class="example__tags">
+                  <li class="tag">{t.examples.niches[demo.niche]}</li>
+                  <li class="tag">{t.examples.languages[demo.language]}</li>
+                </ul>
+                <h3 class="example__title">{title}</h3>
+                <div class="example__before">
+                  <p class="eyebrow">{t.examples.before}</p>
+                  <div class="example__track" aria-hidden="true">
+                    <span class="example__clip" style={`left:${clipLeft}%;width:${clipWidth}%`} />
+                  </div>
+                  <p class="example__line">{line}</p>
+                </div>
+                <a class="text-link" href={watchUrl(demo.source.youtubeId, start)} target="_blank" rel="noopener">
+                  {fill(t.examples.sourceLink, { source: demo.source.name, start: demo.source.start })}
+                  <span aria-hidden="true">↗</span>
+                </a>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .examples {
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .example {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr);
+    gap: 1rem 1.25rem;
+    padding: 1rem;
+    align-items: start;
+  }
+
+  .example__info {
+    display: grid;
+    gap: 0.75rem;
+    min-width: 0;
+  }
+
+  .example__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .example__title {
+    font-size: clamp(1.0625rem, 4vw, 1.375rem);
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  .example__before {
+    display: grid;
+    gap: 0.4rem;
+  }
+
+  .example__track {
+    position: relative;
+    height: 0.5rem;
+    border-radius: 999px;
+    background: var(--bg-raised-2);
+    border: 1px solid var(--line);
+  }
+
+  .example__clip {
+    position: absolute;
+    top: -1px;
+    bottom: -1px;
+    border-radius: 999px;
+    background: var(--accent);
+  }
+
+  .example__line {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+  }
+
+  @media (min-width: 40rem) {
+    .example {
+      grid-template-columns: minmax(0, 15rem) minmax(0, 1fr);
+      align-items: center;
+    }
+  }
+
+  @media (min-width: 60rem) {
+    .examples {
+      grid-template-columns: repeat(auto-fit, minmax(28rem, 1fr));
+    }
+  }
+</style>

@@ -1,0 +1,71 @@
+---
+import { getDictionary, highlight, type Locale } from '../i18n';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = getDictionary(lang);
+const { items } = t.testimonials;
+---
+
+{
+  items.length > 0 && (
+    <section id="testimonials" class="section" aria-labelledby="testimonials-title">
+      <div class="container">
+        <div class="section__head">
+          <h2 id="testimonials-title" class="display section-title" set:html={highlight(t.testimonials.title)} />
+        </div>
+        <div class="quotes">
+          {items.map((item) => (
+            <figure class="quote card">
+              <blockquote>
+                <p>“{item.quote}”</p>
+              </blockquote>
+              <figcaption>
+                <strong>{item.name}</strong>
+                <span>{item.role}</span>
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .quotes {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .quote {
+    display: grid;
+    gap: 1rem;
+    margin: 0;
+    padding: 1.25rem;
+  }
+
+  .quote blockquote {
+    margin: 0;
+    font-size: 1.0625rem;
+  }
+
+  .quote figcaption {
+    display: grid;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+  }
+
+  .quote strong {
+    color: var(--text);
+  }
+
+  @media (min-width: 56rem) {
+    .quotes {
+      grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+    }
+  }
+</style>

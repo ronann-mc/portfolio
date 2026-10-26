@@ -1,0 +1,251 @@
+---
+import { shared } from '../data/shared';
+import { fill, getDictionary, highlight, type Locale } from '../i18n';
+import { formatPrice } from '../lib/format';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = getDictionary(lang);
+const { packages, trial, availability } = shared.pricing;
+const currency = t.currency;
+const price = (amount: number) => formatPrice(amount, currency, lang);
+
+const plans = packages.map((plan) => ({
+  ...plan,
+  name: fill(t.pricing.shortsPerMonth, { count: plan.shorts }),
+  amount: price(plan.price[currency]),
+  perShort: fill(t.pricing.perShort, { price: price(plan.price[currency] / plan.shorts) }),
+}));
+const trialText = fill(t.pricing.trial.text, {
+  count: trial.shorts,
+  price: price(trial.price[currency]),
+  days: trial.deductibleWithinDays,
+});
+const ctaHref = t.contact.formUrl || '#contact';
+---
+
+<section id="pricing" class="section" aria-labelledby="pricing-title">
+  <div class="container">
+    <div class="section__head">
+      <h2 id="pricing-title" class="display section-title" set:html={highlight(t.pricing.title)} />
+      <p class="section__intro">{t.pricing.intro}</p>
+      {availability.show && <p class="pricing__spots">{fill(t.pricing.spotsLeft, { spots: availability.spots })}</p>}
+    </div>
+
+    <ul class="plans">
+      {
+        plans.map((plan) => (
+          <li class:list={['plan card', { 'plan--featured': plan.featured }]}>
+            {plan.featured && <p class="plan__badge">{t.pricing.featured}</p>}
+            <h3 class="display plan__name">{plan.name}</h3>
+            <p class="plan__price">
+              <span class="plan__amount">{plan.amount}</span>
+              <span class="plan__per">{t.pricing.perMonth}</span>
+            </p>
+            <p class="plan__unit">{plan.perShort}</p>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="pricing__details">
+      <div class="card pricing__box">
+        <h3 class="pricing__subtitle">{t.pricing.included.title}</h3>
+        <ul class="checklist">
+          {t.pricing.included.items.map((item) => <li>{item}</li>)}
+        </ul>
+        <p class="pricing__delivery">{t.pricing.delivery}</p>
+      </div>
+      <div class="card pricing__box pricing__trial">
+        <h3 class="display pricing__trial-title">{t.pricing.trial.title}</h3>
+        <p>{trialText}</p>
+        <a class="btn btn--primary" href={ctaHref}>{t.pricing.cta}<span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <ul class="pricing__notes">
+      {t.pricing.notes.map((note) => <li>{note}</li>)}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .pricing__spots {
+    justify-self: start;
+    padding: 0.3rem 0.8rem;
+    border-radius: 999px;
+    background: rgb(255 214 10 / 0.12);
+    color: var(--accent);
+    font-size: 0.875rem;
+    font-weight: 700;
+  }
+
+  .plans {
+    display: grid;
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .plan {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: baseline;
+    gap: 0.25rem 1rem;
+    padding: 1.25rem;
+  }
+
+  .plan--featured {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 1px var(--accent);
+  }
+
+  .plan__badge {
+    position: absolute;
+    top: 0;
+    left: 1.25rem;
+    transform: translateY(-50%);
+    padding: 0.15rem 0.6rem;
+    border-radius: 999px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .plan__name {
+    font-size: clamp(1.125rem, 4vw, 1.375rem);
+  }
+
+  .plan__price {
+    display: flex;
+    align-items: baseline;
+    gap: 0.3rem;
+    justify-self: end;
+  }
+
+  .plan__amount {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(1.75rem, 6vw, 2.5rem);
+    line-height: 1;
+  }
+
+  .plan__per,
+  .plan__unit {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+  }
+
+  .plan__unit {
+    grid-column: 1 / -1;
+  }
+
+  .pricing__details {
+    display: grid;
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+  }
+
+  .pricing__box {
+    display: grid;
+    gap: 1rem;
+    align-content: start;
+    padding: 1.25rem;
+  }
+
+  .pricing__subtitle {
+    font-size: 1.0625rem;
+    font-weight: 700;
+  }
+
+  .checklist {
+    display: grid;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .checklist li {
+    position: relative;
+    padding-left: 1.75rem;
+  }
+
+  .checklist li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.3rem;
+    width: 1.1rem;
+    height: 1.1rem;
+    border-radius: 50%;
+    background: var(--accent)
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 12.5l4 4 8-9' fill='none' stroke='%230a0a0d' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
+      center / 0.8rem no-repeat;
+  }
+
+  .pricing__delivery {
+    font-size: 0.9375rem;
+    color: var(--text-muted);
+  }
+
+  .pricing__trial {
+    background:
+      radial-gradient(30rem 16rem at 100% 0%, rgb(255 214 10 / 0.12), transparent 70%),
+      var(--bg-raised);
+  }
+
+  .pricing__trial-title {
+    font-size: clamp(1.25rem, 4.5vw, 1.625rem);
+  }
+
+  .pricing__trial .btn {
+    justify-self: start;
+  }
+
+  .pricing__notes {
+    display: grid;
+    gap: 0.25rem;
+    margin: 1.25rem 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+  }
+
+  @media (min-width: 56rem) {
+    .plans {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .plan {
+      grid-template-columns: 1fr;
+      align-content: start;
+      padding: 1.5rem;
+    }
+
+    .plan__price {
+      justify-self: start;
+      margin-top: 0.75rem;
+    }
+
+    .pricing__details {
+      grid-template-columns: 1.3fr 1fr;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .pricing__notes {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>

@@ -1,0 +1,24 @@
+# Build output and caches
+dist/
+.astro/
+node_modules/
+
+# Local secrets (legal address and phone)
+.env
+.env.*
+!.env.example
+
+# Raw YouTube Studio screenshots: they show revenue, never commit them.
+# Run `npm run crop-proofs` to regenerate src/assets/proofs/ from them.
+images/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+.idea/
+npm-debug.log*
+
+# Local preview config for Claude Code
+.claude/

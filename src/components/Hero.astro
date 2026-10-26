@@ -1,0 +1,149 @@
+---
+import HeroVisual from './HeroVisual.astro';
+import { fill, getDictionary, highlight, type Locale } from '../i18n';
+import { formatCompact } from '../lib/format';
+import { commonVars, featuredChannel, totals } from '../lib/stats';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = getDictionary(lang);
+const vars = commonVars(lang);
+
+const stats = [
+  { value: formatCompact(totals.views, lang), label: t.hero.stats.views },
+  { value: formatCompact(totals.subscribers, lang), label: t.hero.stats.subscribers },
+  { value: formatCompact(featuredChannel.views, lang), label: fill(t.hero.stats.featured, vars) },
+];
+const footnote = fill(featuredChannel.monetizedInWeeks ? t.hero.footnote : t.hero.footnoteNoMonetization, vars);
+const ctaHref = t.contact.formUrl || '#contact';
+---
+
+<section class="hero" aria-labelledby="hero-title">
+  <div class="container hero__inner">
+    <div class="hero__copy">
+      <p class="eyebrow">{t.hero.kicker}</p>
+      <h1 id="hero-title" class="display hero__title" set:html={highlight(t.hero.title)} />
+      <p class="hero__subtitle">{fill(t.hero.subtitle, vars)}</p>
+
+      <dl class="hero__stats">
+        {
+          stats.map((stat) => (
+            <div class="hero__stat">
+              <dt class="hero__label">{stat.label}</dt>
+              <dd class="hero__value">
+                {stat.value.replace(/\+$/, '')}
+                {stat.value.endsWith('+') && <span class="hero__plus">+</span>}
+              </dd>
+            </div>
+          ))
+        }
+      </dl>
+
+      <div class="hero__actions">
+        <a class="btn btn--primary" href={ctaHref}>{t.hero.cta}<span aria-hidden="true">→</span></a>
+        <a class="btn btn--ghost" href="#results">{t.hero.ctaSecondary}</a>
+      </div>
+      <p class="hero__footnote">{footnote}</p>
+    </div>
+    <HeroVisual lang={lang} />
+  </div>
+</section>
+
+<style>
+  .hero {
+    padding-block: clamp(1.5rem, 6vw, 5rem) clamp(2.5rem, 8vw, 6rem);
+    background:
+      radial-gradient(60rem 30rem at 85% -10%, rgb(255 214 10 / 0.1), transparent 60%),
+      var(--bg);
+  }
+
+  .hero__inner {
+    display: grid;
+    align-items: center;
+    gap: 3rem;
+  }
+
+  .hero__copy {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .hero__title {
+    font-size: clamp(1.75rem, 7.4vw, 4.25rem);
+    max-width: 18ch;
+  }
+
+  @media (min-width: 60rem) {
+    .hero__inner {
+      grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+    }
+
+    .hero__title {
+      font-size: clamp(2.5rem, 4.1vw, 3.75rem);
+      max-width: none;
+    }
+  }
+
+  .hero__subtitle {
+    max-width: 38rem;
+    color: var(--text-muted);
+    font-size: clamp(1rem, 2.6vw, 1.1875rem);
+  }
+
+  .hero__stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.75rem;
+    margin: 0.5rem 0 0;
+    padding-top: 1rem;
+    border-top: 1px solid var(--line);
+    max-width: 44rem;
+  }
+
+  .hero__stat {
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: flex-end;
+    gap: 0.25rem;
+  }
+
+  .hero__value {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(1.6rem, 7vw, 3.25rem);
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .hero__plus {
+    color: var(--accent);
+  }
+
+  .hero__label {
+    font-size: clamp(0.75rem, 2.4vw, 0.9375rem);
+    line-height: 1.35;
+    color: var(--text-muted);
+  }
+
+  .hero__footnote {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+  }
+
+  @media (max-width: 30rem) {
+    .hero__actions .btn--primary {
+      flex: 1 1 100%;
+    }
+  }
+</style>

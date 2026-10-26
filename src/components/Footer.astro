@@ -1,0 +1,90 @@
+---
+import { shared } from '../data/shared';
+import { getDictionary, otherLocale, pathFor, type Locale, type RouteKey } from '../i18n';
+
+interface Props {
+  lang: Locale;
+  routeKey: RouteKey;
+}
+
+const { lang, routeKey } = Astro.props;
+const t = getDictionary(lang);
+const other = otherLocale(lang);
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="container footer__inner">
+    <div class="footer__brand">
+      <p class="footer__name">{shared.site.name}</p>
+      <p class="footer__tagline">{t.footer.tagline}</p>
+    </div>
+    <ul class="footer__links">
+      <li><a class="text-link" href={`mailto:${shared.site.email}`}>{shared.site.email}</a></li>
+      <li><a href={pathFor('legal', lang)}>{t.footer.legal}</a></li>
+      <li>
+        <a href={pathFor(routeKey, other)} hreflang={other} lang={other}>{t.nav.otherLanguage}</a>
+      </li>
+    </ul>
+    <p class="footer__copy">© {year} {shared.site.name}</p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    border-top: 1px solid var(--line);
+    padding-block: 2.5rem 3rem;
+    font-size: 0.9375rem;
+    color: var(--text-muted);
+  }
+
+  .footer__inner {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .footer__name {
+    color: var(--text);
+    font-family: var(--font-display);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .footer__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .footer__links a {
+    display: inline-block;
+    padding-block: 0.25rem;
+  }
+
+  .footer__links a:not(.text-link) {
+    text-decoration: none;
+  }
+
+  .footer__links a:not(.text-link):hover {
+    color: var(--text);
+  }
+
+  .footer__copy {
+    font-size: 0.8125rem;
+  }
+
+  @media (min-width: 48rem) {
+    .footer__inner {
+      grid-template-columns: 1fr auto;
+      align-items: start;
+    }
+
+    .footer__copy {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

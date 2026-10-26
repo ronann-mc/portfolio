@@ -1,0 +1,47 @@
+---
+import { fill, getDictionary, highlight, type Locale } from '../i18n';
+import { commonVars } from '../lib/stats';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = getDictionary(lang);
+const vars = commonVars(lang);
+---
+
+<section id="about" class="section" aria-labelledby="about-title">
+  <div class="container about">
+    <h2 id="about-title" class="display section-title" set:html={highlight(t.about.title)} />
+    <div class="about__text">
+      {t.about.paragraphs.map((paragraph) => <p>{fill(paragraph, vars)}</p>)}
+    </div>
+  </div>
+</section>
+
+<style>
+  .about {
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .about__text {
+    display: grid;
+    gap: 1rem;
+    max-width: 40rem;
+    font-size: clamp(1rem, 2.6vw, 1.1875rem);
+  }
+
+  .about__text p:not(:first-child) {
+    color: var(--text-muted);
+  }
+
+  @media (min-width: 56rem) {
+    .about {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+      gap: 3rem;
+      align-items: start;
+    }
+  }
+</style>

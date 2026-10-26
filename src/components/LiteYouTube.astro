@@ -1,0 +1,158 @@
+---
+// Lightweight YouTube player: a local thumbnail and a play button.
+// The YouTube iframe (and any request to Google) only loads after a click.
+import type { ImageMetadata } from 'astro';
+import { getImage } from 'astro:assets';
+import { findThumbnail } from '../lib/youtube';
+
+interface Props {
+  id: string;
+  title: string;
+  playLabel: string;
+  /** Small label in the top-left corner, e.g. "Best Short". */
+  badge?: string;
+  /** Local image used instead of the YouTube thumbnail. */
+  thumbnail?: ImageMetadata;
+  sizes?: string;
+}
+
+const { id, title, playLabel, badge, thumbnail, sizes = '(min-width: 56rem) 260px, 45vw' } = Astro.props;
+
+const source = thumbnail ?? (await findThumbnail(id));
+const poster = source
+  ? await getImage({ src: source, width: 540, height: 960, widths: [270, 405, 540], fit: 'cover', format: 'webp' })
+  : null;
+---
+
+<div class="yt" data-yt-id={id} data-yt-title={title}>
+  {
+    poster ? (
+      <img
+        class="yt__poster"
+        src={poster.src}
+        srcset={poster.srcSet.attribute}
+        sizes={sizes}
+        width="540"
+        height="960"
+        alt=""
+        loading="lazy"
+        decoding="async"
+      />
+    ) : (
+      <div class="yt__placeholder" aria-hidden="true">
+        RM
+      </div>
+    )
+  }
+  {badge && <span class="yt__badge">{badge}</span>}
+  <button type="button" class="yt__play" aria-label={playLabel}>
+    <span class="yt__icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="22" height="22"><path d="M8 5.5v13l11-6.5z" fill="currentColor"></path></svg>
+    </span>
+  </button>
+</div>
+
+<script>
+  document.addEventListener('click', (event) => {
+    const button = event.target instanceof Element ? event.target.closest('.yt__play') : null;
+    const wrapper = button?.closest<HTMLElement>('[data-yt-id]');
+    if (!wrapper) return;
+
+    const iframe = document.createElement('iframe');
+    iframe.src = `https://www.youtube-nocookie.com/embed/${wrapper.dataset.ytId}?autoplay=1&playsinline=1&rel=0`;
+    iframe.title = wrapper.dataset.ytTitle ?? 'YouTube';
+    iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+    iframe.allowFullscreen = true;
+    wrapper.replaceChildren(iframe);
+    iframe.focus();
+  });
+</script>
+
+<style>
+  .yt {
+    position: relative;
+    aspect-ratio: 9 / 16;
+    overflow: hidden;
+    border-radius: var(--radius-sm);
+    background: var(--bg-raised-2);
+    isolation: isolate;
+  }
+
+  .yt__poster,
+  .yt :global(iframe) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  .yt__poster {
+    object-fit: cover;
+  }
+
+  .yt__placeholder {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    background:
+      radial-gradient(circle at 30% 20%, rgb(255 214 10 / 0.18), transparent 55%),
+      var(--bg-raised-2);
+    color: var(--line);
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 3rem;
+  }
+
+  .yt__badge {
+    position: absolute;
+    top: 0.6rem;
+    left: 0.6rem;
+    z-index: 1;
+    padding: 0.2rem 0.55rem;
+    border-radius: 999px;
+    background: rgb(10 10 13 / 0.8);
+    color: var(--text);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    max-width: calc(100% - 1.2rem);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    pointer-events: none;
+  }
+
+  .yt__play {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: 0;
+    border: 0;
+    background: linear-gradient(to top, rgb(0 0 0 / 0.45), transparent 55%);
+    color: var(--accent-ink);
+    cursor: pointer;
+  }
+
+  .yt__play:focus-visible {
+    outline-offset: -4px;
+  }
+
+  .yt__icon {
+    display: grid;
+    place-items: center;
+    width: 3.25rem;
+    height: 3.25rem;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 6px 24px rgb(0 0 0 / 0.45);
+    transition: transform 0.15s ease;
+  }
+
+  .yt__play:hover .yt__icon {
+    transform: scale(1.08);
+  }
+</style>

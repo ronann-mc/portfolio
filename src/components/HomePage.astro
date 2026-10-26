@@ -1,0 +1,33 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from './Hero.astro';
+import Results from './Results.astro';
+import Examples from './Examples.astro';
+import Pricing from './Pricing.astro';
+import Process from './Process.astro';
+import About from './About.astro';
+import Testimonials from './Testimonials.astro';
+import Faq from './Faq.astro';
+import Contact from './Contact.astro';
+import { fill, getDictionary, type Locale } from '../i18n';
+import { commonVars } from '../lib/stats';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = getDictionary(lang);
+---
+
+<BaseLayout lang={lang} title={t.meta.title} description={fill(t.meta.description, commonVars(lang))} routeKey="home">
+  <Hero lang={lang} />
+  <Results lang={lang} />
+  <Examples lang={lang} />
+  <Pricing lang={lang} />
+  <Process lang={lang} />
+  <About lang={lang} />
+  <Testimonials lang={lang} />
+  <Faq lang={lang} />
+  <Contact lang={lang} />
+</BaseLayout>

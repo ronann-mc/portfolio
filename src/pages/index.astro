@@ -1,0 +1,38 @@
+---
+// Static redirect from / to /en/ (GitHub Pages has no server-side redirects).
+import { shared } from '../data/shared';
+import { pathFor } from '../i18n';
+
+const target = pathFor('home', 'en');
+const canonical = new URL(target, Astro.site ?? shared.site.url);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{shared.site.name}</title>
+    <meta name="robots" content="noindex" />
+    <link rel="canonical" href={canonical} />
+    <meta http-equiv="refresh" content={`0; url=${target}`} />
+    <script is:inline define:vars={{ target }}>
+      location.replace(target + location.search + location.hash);
+    </script>
+    <style>
+      body {
+        margin: 0;
+        padding: 2rem;
+        background: #0a0a0d;
+        color: #f5f5f0;
+        font-family: system-ui, sans-serif;
+      }
+      a {
+        color: #ffd60a;
+      }
+    </style>
+  </head>
+  <body>
+    <p><a href={target}>Continue to the site</a> · <a href={pathFor('home', 'fr')} lang="fr">Version française</a></p>
+  </body>
+</html>

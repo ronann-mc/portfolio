@@ -1,0 +1,150 @@
+---
+// Desktop-only visual next to the hero text, as phone screens: the featured
+// channel's best Short (with its views) and the first editing demo, once its
+// thumbnail is available. On phones, a <picture> media query keeps the browser
+// from downloading these thumbnails.
+import type { ImageMetadata } from 'astro';
+import { getImage } from 'astro:assets';
+import { shared } from '../data/shared';
+import { getDictionary, type Locale } from '../i18n';
+import { formatCompactPrecise } from '../lib/format';
+import { featuredChannel } from '../lib/stats';
+import { findThumbnail } from '../lib/youtube';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = getDictionary(lang);
+const EMPTY_PIXEL = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
+
+async function poster(youtubeId: string, local?: ImageMetadata) {
+  const source = local ?? (await findThumbnail(youtubeId));
+  return source ? (await getImage({ src: source, width: 540, height: 960, fit: 'cover', format: 'webp' })).src : null;
+}
+
+const cards: Array<{ image: string; big: string; label: string; small: string }> = [];
+
+const featuredPoster = await poster(featuredChannel.bestShort.youtubeId);
+if (featuredPoster) {
+  cards.push({
+    image: featuredPoster,
+    big: formatCompactPrecise(featuredChannel.bestShort.views, lang),
+    label: t.results.stats.views,
+    small: featuredChannel.name,
+  });
+}
+
+const demo = shared.demos[0];
+const demoPoster = demo ? await poster(demo.youtubeId, demo.thumbnail) : null;
+if (demo && demoPoster) {
+  cards.push({
+    image: demoPoster,
+    big: t.examples.niches[demo.niche],
+    label: t.hero.visualDemoLabel,
+    small: t.examples.languages[demo.language],
+  });
+}
+---
+
+{
+  cards.length > 0 && (
+    <div class:list={['hero-visual', { 'hero-visual--single': cards.length === 1 }]} aria-hidden="true">
+      {cards.map((card, index) => (
+        <figure class:list={['hero-visual__card', `hero-visual__card--${index}`]}>
+          <picture>
+            <source media="(min-width: 60rem)" srcset={card.image} />
+            <img src={EMPTY_PIXEL} width="540" height="960" alt="" decoding="async" />
+          </picture>
+          <figcaption>
+            <span class="hero-visual__big">{card.big}</span>
+            <span class="hero-visual__label">{card.label}</span>
+            <span class="hero-visual__small">{card.small}</span>
+          </figcaption>
+        </figure>
+      ))}
+    </div>
+  )
+}
+
+<style>
+  .hero-visual {
+    display: none;
+  }
+
+  @media (min-width: 60rem) {
+    .hero-visual {
+      position: relative;
+      display: block;
+      height: 32rem;
+    }
+
+    .hero-visual__card {
+      position: absolute;
+      width: 15rem;
+      aspect-ratio: 9 / 16;
+      margin: 0;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 1.5rem;
+      background: var(--bg-raised-2);
+      box-shadow: 0 30px 60px rgb(0 0 0 / 0.55);
+    }
+
+    /* Proof in front, demo behind. */
+    .hero-visual__card--0 {
+      top: 0;
+      right: 0;
+      z-index: 1;
+      transform: rotate(4deg);
+    }
+
+    .hero-visual__card--1 {
+      top: 2.5rem;
+      left: 0;
+      transform: rotate(-5deg);
+    }
+
+    .hero-visual--single .hero-visual__card--0 {
+      right: 50%;
+      transform: translateX(50%) rotate(3deg);
+    }
+
+    .hero-visual__card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .hero-visual__card figcaption {
+      position: absolute;
+      inset: auto 0 0;
+      display: grid;
+      padding: 3rem 1rem 1rem;
+      background: linear-gradient(to top, rgb(0 0 0 / 0.85), transparent);
+    }
+
+    .hero-visual__big {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 2rem;
+      line-height: 1;
+      color: var(--accent);
+      text-transform: uppercase;
+    }
+
+    .hero-visual__label {
+      font-size: 0.8125rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .hero-visual__small {
+      margin-top: 0.4rem;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+  }
+</style>
