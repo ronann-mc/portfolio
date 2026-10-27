@@ -9,20 +9,21 @@ interface Props {
 
 const { lang } = Astro.props;
 const t = getDictionary(lang);
-const { packages, trial, availability } = shared.pricing;
+const { packages, pilot, availability } = shared.pricing;
 const currency = t.currency;
 const price = (amount: number) => formatPrice(amount, currency, lang);
 
 const plans = packages.map((plan) => ({
   ...plan,
-  name: fill(t.pricing.shortsPerMonth, { count: plan.shorts }),
+  volume: fill(t.pricing.shortsPerMonth, { count: plan.shorts }),
   amount: price(plan.price[currency]),
   perShort: fill(t.pricing.perShort, { price: price(plan.price[currency] / plan.shorts) }),
 }));
-const trialText = fill(t.pricing.trial.text, {
-  count: trial.shorts,
-  price: price(trial.price[currency]),
-  days: trial.deductibleWithinDays,
+const pilotText = fill(t.pricing.pilot.text, {
+  count: pilot.shorts,
+  price: price(pilot.price[currency]),
+  unit: price(pilot.price[currency] / pilot.shorts),
+  days: pilot.deductibleWithinDays,
 });
 const ctaHref = t.contact.formUrl || '#contact';
 ---
@@ -40,7 +41,10 @@ const ctaHref = t.contact.formUrl || '#contact';
         plans.map((plan) => (
           <li class:list={['plan card', { 'plan--featured': plan.featured }]}>
             {plan.featured && <p class="plan__badge">{t.pricing.featured}</p>}
-            <h3 class="display plan__name">{plan.name}</h3>
+            <h3 class="plan__title">
+              <span class="eyebrow">{plan.name}</span>
+              <span class="display plan__name">{plan.volume}</span>
+            </h3>
             <p class="plan__price">
               <span class="plan__amount">{plan.amount}</span>
               <span class="plan__per">{t.pricing.perMonth}</span>
@@ -59,9 +63,9 @@ const ctaHref = t.contact.formUrl || '#contact';
         </ul>
         <p class="pricing__delivery">{t.pricing.delivery}</p>
       </div>
-      <div class="card pricing__box pricing__trial">
-        <h3 class="display pricing__trial-title">{t.pricing.trial.title}</h3>
-        <p>{trialText}</p>
+      <div class="card pricing__box pricing__pilot">
+        <h3 class="display pricing__pilot-title">{t.pricing.pilot.title}</h3>
+        <p>{pilotText}</p>
         <a class="btn btn--primary" href={ctaHref}>{t.pricing.cta}<span aria-hidden="true">→</span></a>
       </div>
     </div>
@@ -118,6 +122,12 @@ const ctaHref = t.contact.formUrl || '#contact';
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.04em;
+  }
+
+  .plan__title {
+    display: grid;
+    gap: 0.15rem;
+    font-size: inherit;
   }
 
   .plan__name {
@@ -197,17 +207,17 @@ const ctaHref = t.contact.formUrl || '#contact';
     color: var(--text-muted);
   }
 
-  .pricing__trial {
+  .pricing__pilot {
     background:
       radial-gradient(30rem 16rem at 100% 0%, rgb(255 214 10 / 0.12), transparent 70%),
       var(--bg-raised);
   }
 
-  .pricing__trial-title {
+  .pricing__pilot-title {
     font-size: clamp(1.25rem, 4.5vw, 1.625rem);
   }
 
-  .pricing__trial .btn {
+  .pricing__pilot .btn {
     justify-self: start;
   }
 

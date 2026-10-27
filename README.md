@@ -32,7 +32,7 @@ Tu n'as jamais besoin de toucher aux composants. Tout est dans `src/data/` :
 | Les chiffres (vues, abonnés, rétention), la date des chiffres | `src/data/shared.ts` | `statsDate`, `channels` |
 | Les shorts mis en avant (ID YouTube) | `src/data/shared.ts` | `channels[].bestShort.youtubeId` |
 | Les démos de montage, la source et les minutages | `src/data/shared.ts` | `demos` |
-| Les prix (€ et $), l'essai, les places disponibles | `src/data/shared.ts` | `pricing` |
+| Les prix (€ et $, avec le taux utilisé en commentaire), le pilote, les places disponibles | `src/data/shared.ts` | `pricing` |
 | L'adresse e-mail affichée | `src/data/shared.ts` | `site.email` |
 | SIREN, TVA, hébergeur | `src/data/shared.ts` | `legal` |
 | Le token Cloudflare Web Analytics | `src/data/shared.ts` | `analytics.cloudflareToken` |
@@ -63,7 +63,7 @@ Les chiffres du haut de page, de la section « Qui je suis », de la description
 
 ### Créer le formulaire Tally
 
-Crée un formulaire par langue sur [tally.so](https://tally.so) avec 3 champs : e-mail (obligatoire), lien de la chaîne ou du podcast (obligatoire), forfait souhaité (facultatif : 8, 12, 20, essai). Colle chaque lien dans `contact.formUrl`. Tant que le champ est vide, les boutons ouvrent un e-mail à la place.
+Crée un formulaire par langue sur [tally.so](https://tally.so) avec 3 champs : e-mail (obligatoire), lien de la chaîne ou du podcast (obligatoire), forfait souhaité (facultatif : Pilote, Starter, Growth, Scale). Colle chaque lien dans `contact.formUrl`. Tant que le champ est vide, les boutons ouvrent un e-mail à la place.
 
 ### Activer Cloudflare Web Analytics (sans cookie)
 

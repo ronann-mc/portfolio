@@ -30,7 +30,7 @@ export const shared: SharedData = {
       monetizedInWeeks: 3,
       views: 151_389_714,
       subscribers: 68_000,
-      bestShort: { youtubeId: 'EwW3RtiN73U', views: 37_869_620, subscribersGained: 15_000, stayedToWatch: 75.7 },
+      bestShort: { youtubeId: '-D3tYyXXEng', views: 86_400_000, subscribersGained: 60_900, stayedToWatch: 78.2 },
       proofs: [
         { kind: 'shortViews', image: sghShortViews },
         { kind: 'shortRetention', image: sghShortRetention },
@@ -71,13 +71,14 @@ export const shared: SharedData = {
     },
   ],
 
+  // Prices per month. USD = EUR × 1.12 (rate of late October 2026), rounded to a price ending in 9.
   pricing: {
     packages: [
-      { id: 'starter', shorts: 8, price: { eur: 400, usd: 450 } },
-      { id: 'growth', shorts: 12, price: { eur: 540, usd: 600 }, featured: true },
-      { id: 'scale', shorts: 20, price: { eur: 800, usd: 890 } },
+      { id: 'starter', name: 'Starter', shorts: 8, price: { eur: 600, usd: 679 } },
+      { id: 'growth', name: 'Growth', shorts: 12, price: { eur: 840, usd: 949 }, featured: true },
+      { id: 'scale', name: 'Scale', shorts: 20, price: { eur: 1300, usd: 1449 } },
     ],
-    trial: { shorts: 3, price: { eur: 90, usd: 99 }, deductibleWithinDays: 14 },
+    pilot: { shorts: 3, price: { eur: 120, usd: 139 }, deductibleWithinDays: 14 },
     availability: { show: false, spots: 0 },
   },
 

@@ -66,7 +66,13 @@ async function detectLayout(file) {
 }
 
 async function cropStats(src, out) {
-  const { H, tileTop, tileBottom, left, right } = await detectLayout(src);
+  const layout = await detectLayout(src);
+  // Some captures start directly with the tiles (no title line with the exact
+  // view count): keep the Views and Subscribers tiles and cut the last third
+  // of the card, the revenue column.
+  if (layout.tileTop < 40) return cropRevenueColumn(src, out, layout);
+
+  const { H, tileTop, tileBottom, left, right } = layout;
   const x = left + 3;
   const width = right - left - 5;
   const titleHeight = tileTop - 8;
@@ -85,6 +91,12 @@ async function cropStats(src, out) {
     ])
     .png()
     .toFile(out);
+}
+
+async function cropRevenueColumn(src, out, { H, left, right }) {
+  // The three tiles share the card width equally; stop just before the revenue tile's divider.
+  const width = Math.round(left + ((right - left) * 2) / 3) - 2;
+  await sharp(src).extract({ left: 0, top: 0, width, height: H }).png().toFile(out);
 }
 
 await mkdir(OUT, { recursive: true });

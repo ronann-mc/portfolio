@@ -112,9 +112,9 @@ const fr: Dictionary = {
     },
     delivery:
       'Premiers shorts sous 5 jours ouvrés, puis un nouveau lot chaque semaine. Un tour de retouches par short, traité sous 48 h.',
-    trial: {
-      title: 'Pas encore sûr ? Commence par un essai.',
-      text: '{count} shorts pour {price}, déduits de ton premier mois si tu continues dans les {days} jours.',
+    pilot: {
+      title: 'Pas encore sûr ? Commence par le pilote.',
+      text: 'Pilote : {count} shorts pour {price} ({unit} par short), déduits de ton premier mois si tu continues dans les {days} jours.',
     },
     cta: 'Recevoir ma proposition',
     notes: [

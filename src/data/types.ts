@@ -15,8 +15,9 @@ export interface SharedData {
   channels: Channel[];
   demos: Demo[];
   pricing: {
-    packages: Array<{ id: string; shorts: number; price: Record<Currency, number>; featured?: boolean }>;
-    trial: { shorts: number; price: Record<Currency, number>; deductibleWithinDays: number };
+    packages: Array<{ id: string; name: string; shorts: number; price: Record<Currency, number>; featured?: boolean }>;
+    /** One-off first order, to test the collaboration before a monthly plan. */
+    pilot: { shorts: number; price: Record<Currency, number>; deductibleWithinDays: number };
     /** Shows "X spots left" above the plans when `show` is true. */
     availability: { show: boolean; spots: number };
   };
@@ -137,7 +138,7 @@ export interface Dictionary {
     spotsLeft: string;
     included: { title: string; items: string[] };
     delivery: string;
-    trial: { title: string; text: string };
+    pilot: { title: string; text: string };
     cta: string;
     notes: string[];
   };

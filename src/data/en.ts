@@ -110,9 +110,9 @@ const en: Dictionary = {
       ],
     },
     delivery: 'First Shorts within 5 working days, then a new batch every week. One round of revisions per Short, done within 48 hours.',
-    trial: {
-      title: 'Not sure yet? Start with a trial.',
-      text: '{count} Shorts for {price}, deducted from your first month if you continue within {days} days.',
+    pilot: {
+      title: 'Not sure yet? Start with a pilot.',
+      text: 'Pilot: {count} Shorts for {price} ({unit} per Short), deducted from your first month if you continue within {days} days.',
     },
     cta: 'Get my proposal',
     notes: [

@@ -14,10 +14,11 @@ const { lang } = Astro.props;
 const t = getDictionary(lang);
 
 function proofAlt(channel: Channel, kind: ProofKind): string {
-  const views = kind === 'channelViews' ? channel.views : channel.bestShort.views;
+  const views =
+    kind === 'channelViews' ? formatNumber(channel.views, lang) : formatCompactPrecise(channel.bestShort.views, lang);
   return fill(t.results.proofAlts[kind], {
     channel: channel.name,
-    views: formatNumber(views, lang),
+    views,
     stayed: formatNumber(channel.bestShort.stayedToWatch, lang),
   });
 }
