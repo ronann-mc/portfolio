@@ -29,35 +29,20 @@ export default defineConfig({
   // never contact Google before they press play.
   image: { domains: ['i.ytimg.com'] },
 
-  // Self-hosted fonts: only the Latin files of the installed @fontsource packages,
-  // so each page preloads two small files and never contacts a font CDN.
+  // Self-hosted font: only the Latin file of the installed @fontsource package,
+  // so each page preloads one small variable file and never contacts a font CDN.
   fonts: [
     {
       provider: fontProviders.local(),
-      name: 'Montserrat',
-      cssVariable: '--font-display',
-      fallbacks: ['Arial Black', 'sans-serif'],
-      options: {
-        variants: [
-          {
-            weight: 800,
-            style: 'normal',
-            src: ['./node_modules/@fontsource/montserrat/files/montserrat-latin-800-normal.woff2'],
-          },
-        ],
-      },
-    },
-    {
-      provider: fontProviders.local(),
-      name: 'Inter',
-      cssVariable: '--font-body',
+      name: 'TikTok Sans',
+      cssVariable: '--font-sans',
       fallbacks: ['system-ui', 'sans-serif'],
       options: {
         variants: [
           {
-            weight: '100 900',
+            weight: '300 900',
             style: 'normal',
-            src: ['./node_modules/@fontsource-variable/inter/files/inter-latin-wght-normal.woff2'],
+            src: ['./node_modules/@fontsource-variable/tiktok-sans/files/tiktok-sans-latin-wght-normal.woff2'],
           },
         ],
       },

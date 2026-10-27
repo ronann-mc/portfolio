@@ -44,7 +44,7 @@ Tu n'as jamais besoin de toucher aux composants. Tout est dans `src/data/` :
 
 Deux conventions dans les textes :
 
-- `*mots*` : surligne les mots en jaune (dans les titres).
+- `*mots*` : met les mots en vert (dans les titres), comme un mot-clé de sous-titre.
 - `{views}`, `{months}`, `{price}`… : valeurs remplies automatiquement depuis `shared.ts`. Ne les traduis pas et ne les supprime pas : si une variable manque, le build s'arrête avec un message qui dit laquelle.
 
 Les chiffres du haut de page, de la section « Qui je suis », de la description Google et de l'image de partage (`/og/en.png`, `/og/fr.png`) sont **calculés** à partir de `channels` : mets à jour les chaînes et tout suit.
@@ -165,5 +165,6 @@ public/          ← CNAME, robots.txt
 Choix techniques à connaître :
 
 - **Vidéos** : aucun fichier vidéo dans le dépôt. Les miniatures sont téléchargées au build et servies par le site ; l'iframe YouTube (`youtube-nocookie.com`) ne se charge qu'au clic. Aucun cookie avant ce clic.
-- **Polices** : Montserrat ExtraBold et Inter, auto-hébergées (caractères latins uniquement).
+- **Police** : TikTok Sans (licence libre OFL), un seul fichier variable auto-hébergé (caractères latins uniquement). L'image de partage utilise ses versions fixes, car Satori ne lit pas les polices variables.
+- **Identité** : fond noir, un seul accent vert `#b9f53c` (variable `--accent` dans `src/styles/global.css`, à changer avec `--accent-rgb`, `--accent-hover` et `COLORS.accent` dans `src/lib/og.ts`). Le vert colore les mots et les boutons, mais ne sert jamais de pavé derrière un mot à côté d'un texte blanc.
 - **SEO** : balises `hreflang`, Open Graph par langue, `sitemap-index.xml`, `robots.txt`. Les mentions légales sont en `noindex`.

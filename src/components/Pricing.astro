@@ -81,7 +81,7 @@ const ctaHref = t.contact.formUrl || '#contact';
     justify-self: start;
     padding: 0.3rem 0.8rem;
     border-radius: 999px;
-    background: rgb(255 214 10 / 0.12);
+    background: rgb(var(--accent-rgb) / 0.12);
     color: var(--accent);
     font-size: 0.875rem;
     font-weight: 700;
@@ -115,9 +115,10 @@ const ctaHref = t.contact.formUrl || '#contact';
     left: 1.25rem;
     transform: translateY(-50%);
     padding: 0.15rem 0.6rem;
+    border: 1px solid var(--accent);
     border-radius: 999px;
-    background: var(--accent);
-    color: var(--accent-ink);
+    background: var(--bg-raised);
+    color: var(--accent);
     font-size: 0.75rem;
     font-weight: 700;
     text-transform: uppercase;
@@ -209,7 +210,7 @@ const ctaHref = t.contact.formUrl || '#contact';
 
   .pricing__pilot {
     background:
-      radial-gradient(30rem 16rem at 100% 0%, rgb(255 214 10 / 0.12), transparent 70%),
+      radial-gradient(30rem 16rem at 100% 0%, rgb(var(--accent-rgb) / 0.12), transparent 70%),
       var(--bg-raised);
   }
 

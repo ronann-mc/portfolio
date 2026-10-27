@@ -58,8 +58,7 @@ const analyticsToken = import.meta.env.PROD ? shared.analytics.cloudflareToken :
     <meta property="og:image:alt" content={t.og.subtitle} />
     <meta name="twitter:card" content="summary_large_image" />
 
-    <Font cssVariable="--font-display" preload />
-    <Font cssVariable="--font-body" preload />
+    <Font cssVariable="--font-sans" preload />
 
     {
       analyticsToken && (

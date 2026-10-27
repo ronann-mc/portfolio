@@ -1,12 +1,18 @@
-/* Design tokens. --font-display and --font-body are defined by Astro's <Font /> component. */
+/* Design tokens. --font-sans is defined by Astro's <Font /> component. */
 :root {
+  --font-display: var(--font-sans);
+  --font-body: var(--font-sans);
+
   --bg: #0a0a0d;
   --bg-raised: #131318;
   --bg-raised-2: #1c1c23;
   --line: #2b2b35;
   --text: #f5f5f0;
   --text-muted: #a9a9b3;
-  --accent: #ffd60a;
+  /* Growth green. --accent-rgb feeds the translucent tints (rgb(var(--accent-rgb) / 0.1)). */
+  --accent: #b9f53c;
+  --accent-rgb: 185 245 60;
+  --accent-hover: #cbff63;
   --accent-ink: #0a0a0d;
 
   --radius: 1.25rem;
@@ -106,13 +112,12 @@ h3 {
   font-size: 1.0625rem;
 }
 
-/* Caption-style typography */
+/* Titles: extra bold, sentence case */
 .display {
   font-family: var(--font-display);
   font-weight: 800;
-  text-transform: uppercase;
-  line-height: 1.05;
-  letter-spacing: -0.01em;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
   text-wrap: balance;
 }
 
@@ -120,13 +125,10 @@ h3 {
   font-size: clamp(1.65rem, 5.5vw, 2.75rem);
 }
 
+/* Highlighted words are coloured like a caption keyword, never set on a filled block. */
 .hl {
-  background: var(--accent);
-  color: var(--accent-ink);
-  padding: 0 0.14em;
-  border-radius: 0.08em;
-  -webkit-box-decoration-break: clone;
-  box-decoration-break: clone;
+  background: none;
+  color: var(--accent);
 }
 
 .eyebrow {
@@ -165,7 +167,7 @@ h3 {
 }
 
 .btn--primary:hover {
-  background: #ffe14d;
+  background: var(--accent-hover);
 }
 
 .btn--ghost {

@@ -23,7 +23,9 @@ const links = [
 <header class="header">
   <div class="container header__inner">
     <a class="header__logo" href={home} aria-label={`Ronan McManus, ${t.nav.home}`}>
-      <span class="header__monogram" aria-hidden="true">RM</span>
+      <svg class="header__mark" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+        <path d="M7 4.9v14.2a1.4 1.4 0 0 0 2.1 1.2l11.3-7.1a1.4 1.4 0 0 0 0-2.4L9.1 3.7A1.4 1.4 0 0 0 7 4.9z" fill="currentColor"></path>
+      </svg>
       <span class="header__name">Ronan McManus</span>
     </a>
 
@@ -43,7 +45,7 @@ const links = [
       <a class="header__lang" href={pathFor(routeKey, other)} hreflang={other} lang={other}>
         {other.toUpperCase()}<span class="visually-hidden"> · {t.nav.otherLanguageLabel}</span>
       </a>
-      <a class="btn btn--primary btn--small" href={anchor('contact')}>{t.nav.contact}</a>
+      <a class="btn btn--ghost btn--small" href={anchor('contact')}>{t.nav.contact}</a>
     </div>
   </div>
 </header>
@@ -69,31 +71,22 @@ const links = [
   .header__logo {
     display: inline-flex;
     align-items: center;
-    gap: 0.6rem;
+    gap: 0.45rem;
+    min-height: 2.75rem;
     text-decoration: none;
     margin-right: auto;
   }
 
-  .header__monogram {
-    display: grid;
-    place-items: center;
-    width: 2rem;
-    height: 2rem;
-    border-radius: 0.45rem;
-    background: var(--accent);
-    color: var(--accent-ink);
-    font-family: var(--font-display);
-    font-weight: 800;
-    font-size: 0.875rem;
-    letter-spacing: -0.02em;
+  .header__mark {
+    flex: none;
+    color: var(--accent);
   }
 
   .header__name {
     font-family: var(--font-display);
     font-weight: 800;
-    font-size: 0.8125rem;
-    text-transform: uppercase;
-    letter-spacing: 0.02em;
+    font-size: 1rem;
+    letter-spacing: -0.01em;
     white-space: nowrap;
   }
 

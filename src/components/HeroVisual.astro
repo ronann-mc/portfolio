@@ -82,7 +82,8 @@ if (demo && demoPoster) {
 
     .hero-visual__card {
       position: absolute;
-      width: 15rem;
+      /* Shrinks on narrow laptops so the back card's caption is not hidden by the front one. */
+      width: min(15rem, 50%);
       aspect-ratio: 9 / 16;
       margin: 0;
       overflow: hidden;
@@ -131,7 +132,7 @@ if (demo && demoPoster) {
       font-size: 2rem;
       line-height: 1;
       color: var(--accent);
-      text-transform: uppercase;
+      letter-spacing: -0.02em;
     }
 
     .hero-visual__label {

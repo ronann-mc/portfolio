@@ -39,9 +39,7 @@ const poster = source
         decoding="async"
       />
     ) : (
-      <div class="yt__placeholder" aria-hidden="true">
-        RM
-      </div>
+      <div class="yt__placeholder" aria-hidden="true" />
     )
   }
   {badge && <span class="yt__badge">{badge}</span>}
@@ -94,15 +92,9 @@ const poster = source
   .yt__placeholder {
     position: absolute;
     inset: 0;
-    display: grid;
-    place-items: center;
     background:
-      radial-gradient(circle at 30% 20%, rgb(255 214 10 / 0.18), transparent 55%),
+      radial-gradient(circle at 30% 20%, rgb(var(--accent-rgb) / 0.18), transparent 55%),
       var(--bg-raised-2);
-    color: var(--line);
-    font-family: var(--font-display);
-    font-weight: 800;
-    font-size: 3rem;
   }
 
   .yt__badge {
