@@ -201,7 +201,7 @@ const en: Dictionary = {
   contact: {
     title: 'Want Shorts that *get watched*?',
     text: 'Send me your channel or podcast link. You’ll get a written proposal within 24 hours.',
-    formUrl: '',
+    formUrl: 'https://tally.so/r/WJJLBP',
     ctaForm: 'Fill in the form (30 s)',
     ctaMail: 'Email me',
     mailSubject: 'Shorts for my podcast',

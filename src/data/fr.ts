@@ -203,7 +203,7 @@ const fr: Dictionary = {
   contact: {
     title: 'Prêt à faire *tourner ton podcast* ?',
     text: 'Envoie-moi le lien de ta chaîne ou de ton podcast. Tu reçois une proposition écrite sous 24 h.',
-    formUrl: '',
+    formUrl: 'https://tally.so/r/kbb2Xj',
     ctaForm: 'Remplir le formulaire (30 s)',
     ctaMail: 'M’écrire',
     mailSubject: 'Des shorts pour mon podcast',
