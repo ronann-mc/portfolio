@@ -14,7 +14,7 @@ export const shared: SharedData = {
   site: {
     url: 'https://ronanmcmanus.com',
     name: 'Ronan McManus',
-    email: 'ronan.mcmanus@proton.me',
+    email: 'contact@ronanmcmanus.com',
   },
 
   statsDate: '2026-10-26',

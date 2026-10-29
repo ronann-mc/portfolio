@@ -136,14 +136,10 @@ Laisse le TTL par défaut. `www.ronanmcmanus.com` redirigera automatiquement ver
 
 ### Et la messagerie Proton ?
 
-Aujourd'hui tu utilises `ronan.mcmanus@proton.me` : il n'y a **aucun enregistrement mail** sur le domaine, donc rien à protéger.
-
-Si tu ajoutes plus tard `contact@ronanmcmanus.com` (offre Proton payante), Proton te donnera des enregistrements à créer **en plus** de ceux du tableau : un `TXT` de vérification, deux `MX` (`mail.protonmail.ch` et `mailsec.protonmail.ch`), un `TXT` SPF, trois `CNAME` DKIM et un `TXT` DMARC. Copie exactement les valeurs affichées par Proton. Ils cohabitent sans problème avec ceux de GitHub Pages. Deux règles :
+L'adresse affichée sur le site est `contact@ronanmcmanus.com` (`site.email` dans `src/data/shared.ts`), hébergée chez Proton. Les enregistrements Proton cohabitent avec ceux de GitHub Pages : un `TXT` de vérification, deux `MX` (`mail.protonmail.ch` et `mailsec.protonmail.ch`), un `TXT` SPF, trois `CNAME` DKIM et un `TXT` DMARC. Deux règles :
 
 - ne supprime jamais les `MX` ni les `TXT` / `CNAME` de Proton en modifiant le DNS du site ;
 - ne crée jamais de `CNAME` sur `@` : il casserait les `MX`.
-
-Pense ensuite à mettre la nouvelle adresse dans `site.email` (`src/data/shared.ts`).
 
 ---
 
