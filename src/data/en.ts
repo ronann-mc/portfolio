@@ -78,10 +78,11 @@ const en: Dictionary = {
     title: 'What I’d make *from your episodes*',
     intro:
       'Editing samples in the style I deliver to clients. Before: a full episode. After: a Short you can post today.',
-    niches: { business: 'Business', finance: 'Finance', sport: 'Sport' },
+    niches: { business: 'Business', finance: 'Finance', sport: 'Sport', mindset: 'Mindset' },
     languages: { en: 'In English', fr: 'In French' },
     titles: {
-      '5tMnuZEeWYI': '3 sales skills you can use everywhere',
+      XPneIm0gPlo: '3 sales skills you can use everywhere',
+      'Cjk6qT-xVoQ': 'Never send it while you’re upset',
     },
     before: 'Before',
     after: 'After',

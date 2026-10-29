@@ -79,10 +79,11 @@ const fr: Dictionary = {
     title: 'Ce que je ferais *de tes épisodes*',
     intro:
       'Des exemples de montage dans le style que je livre. Avant : l’épisode complet. Après : un short prêt à publier.',
-    niches: { business: 'Business', finance: 'Finance', sport: 'Sport' },
+    niches: { business: 'Business', finance: 'Finance', sport: 'Sport', mindset: 'Mindset' },
     languages: { en: 'En anglais', fr: 'En français' },
     titles: {
-      '5tMnuZEeWYI': 'Les 3 compétences de vente qui servent partout',
+      XPneIm0gPlo: 'Les 3 compétences de vente qui servent partout',
+      'Cjk6qT-xVoQ': 'Ne l’envoie jamais sous le coup de l’émotion',
     },
     before: 'Avant',
     after: 'Après',

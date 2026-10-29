@@ -2,7 +2,7 @@ import type { ImageMetadata } from 'astro';
 
 export type Locale = 'en' | 'fr';
 export type Currency = 'eur' | 'usd';
-export type Niche = 'business' | 'finance' | 'sport';
+export type Niche = 'business' | 'finance' | 'sport' | 'mindset';
 export type ProofKind = 'shortViews' | 'shortRetention' | 'channelViews';
 
 /** Language-independent facts: numbers, links, video IDs, prices. */

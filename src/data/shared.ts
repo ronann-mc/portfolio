@@ -57,7 +57,7 @@ export const shared: SharedData = {
   // Add the title of each new demo in en.ts and fr.ts (examples.titles).
   demos: [
     {
-      youtubeId: '5tMnuZEeWYI',
+      youtubeId: 'XPneIm0gPlo',
       niche: 'business',
       language: 'en',
       length: '0:21',
@@ -67,6 +67,19 @@ export const shared: SharedData = {
         episodeLength: '1:39:37',
         start: '3:54',
         end: '6:41',
+      },
+    },
+    {
+      youtubeId: 'Cjk6qT-xVoQ',
+      niche: 'mindset',
+      language: 'en',
+      length: '0:26',
+      source: {
+        name: 'Jay Shetty Podcast',
+        youtubeId: 'd7sUWwHugg8',
+        episodeLength: '1:13:25',
+        start: '52:52',
+        end: '53:34',
       },
     },
   ],
