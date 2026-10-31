@@ -83,6 +83,7 @@ const en: Dictionary = {
     titles: {
       XPneIm0gPlo: '3 sales skills you can use everywhere',
       'Cjk6qT-xVoQ': 'Never send it while you’re upset',
+      VebOe8zETuI: 'Fired at 45 after 20 years in one company',
     },
     before: 'Before',
     after: 'After',

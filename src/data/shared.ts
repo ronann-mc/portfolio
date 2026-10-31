@@ -82,6 +82,19 @@ export const shared: SharedData = {
         end: '53:34',
       },
     },
+    {
+      youtubeId: 'VebOe8zETuI',
+      niche: 'finance',
+      language: 'fr',
+      length: '0:21',
+      source: {
+        name: 'Benjamin Deleuze - Trading',
+        youtubeId: 'lWQgT4l-kzA',
+        episodeLength: '1:47:37',
+        start: '1:44:41',
+        end: '1:45:20',
+      },
+    },
   ],
 
   // Prices per month. USD = EUR × 1.12 (rate of late October 2026), rounded to a price ending in 9.

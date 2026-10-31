@@ -84,6 +84,7 @@ const fr: Dictionary = {
     titles: {
       XPneIm0gPlo: 'Les 3 compétences de vente qui servent partout',
       'Cjk6qT-xVoQ': 'Ne l’envoie jamais sous le coup de l’émotion',
+      VebOe8zETuI: 'Viré à 45 ans après 20 ans dans la même boîte',
     },
     before: 'Avant',
     after: 'Après',
